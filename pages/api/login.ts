@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default function login(req: NextApiRequest, res: NextApiResponse) {
-  const { username } = req.body;
-  if (!username) {
+  const { userId } = req.body;
+  if (!userId) {
     res.status(401);
     res.json({ message: "Invalid user" });
   } else {
-    res.setHeader("Set-Cookie", `session=${username};`);
+    res.setHeader("Set-Cookie", `session=${userId};`);
     res.status(201);
     res.json({ message: "Logged in" });
   }
