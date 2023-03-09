@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Typography,
   Card,
@@ -9,10 +9,25 @@ import {
   Box,
 } from "@mui/material";
 import dynamic from "next/dynamic";
+import useMe from "@/hooks/use-me";
+import Router from "next/router";
+import { hasCookie } from "cookies-next";
 
 const DynamicHeader = dynamic(() => import("../components/header"), {});
 
 export default function ContactPage() {
+  // const { data: res } = useMe();
+
+  // useEffect(() => {
+  //   const isLogin = hasCookie("session");
+  
+  //   if (isLogin) {
+  //     if (!res || res.error) {
+  //       Router.push("/auth");
+  //     }
+  //   }
+  // }, [res]);
+  
   return (
     <>
     <DynamicHeader/>

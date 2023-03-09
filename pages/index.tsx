@@ -12,6 +12,9 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import dynamic from "next/dynamic";
+import useMe from "@/hooks/use-me";
+import Router from "next/router";
+import { useEffect } from "react";
 
 const DynamicHeader = dynamic(() => import("../components/header"), {});
 
@@ -50,13 +53,12 @@ const cards = [
 
 const theme = createTheme();
 
-export default function Album() {
+export default function HomePage() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <DynamicHeader />
       <main>
-        {/* Hero unit */}
         <Box
           sx={{
             bgcolor: "background.paper",
@@ -85,7 +87,7 @@ export default function Album() {
               random images captured by amateur and professional photographers
               from around the world. The images are curated to showcase the
               creativity and skill of the photographers and to inspire viewers
-              to appreciate the art of photography. Whether you're a photography
+              to appreciate the art of photography. Whether youre a photography
               enthusiast or simply looking for a visual escape, Serendipitous
               Snaps has something for everyone.
             </Typography>
@@ -95,13 +97,12 @@ export default function Album() {
               spacing={2}
               justifyContent="center"
             >
-              <Button variant="contained" href="/Auth">Sign-in</Button>
-              <Button variant="outlined" href="/Registration">Sign-up</Button>
+              <Button variant="contained" href="/auth">Sign-in</Button>
+              <Button variant="outlined" href="/registration">Sign-up</Button>
             </Stack>
           </Container>
         </Box>
         <Container sx={{ py: 8 }} maxWidth="md">
-          {/* End hero unit */}
           <Grid container spacing={4}>
             {cards.map((card,index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>

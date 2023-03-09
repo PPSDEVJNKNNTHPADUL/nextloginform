@@ -17,6 +17,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { setCookie } from "cookies-next";
 import dynamic from "next/dynamic";
+import path from "path";
 
 const DynamicHeader = dynamic(() => import("../../components/header"), {});
 
@@ -34,7 +35,7 @@ export default function IndexPage() {
 
   useEffect(() => {
     if (res?.data) {
-      router.replace(`/profile/${res.data.id}`); // use the user ID in the redirect
+      router.push(`/profile/${res.data.id}`); // use the user ID in the redirect
     }
   }, [res, router]);
 
@@ -62,6 +63,7 @@ export default function IndexPage() {
         })
         const userId = response.data.id;
         login(userId).then(() => mutate());
+        setCookie('isLogin','ss')
       }
       }
     catch {
@@ -119,8 +121,8 @@ export default function IndexPage() {
               >
                 LogIn
               </Button>
-                <Link href="/Registration">
-                  <Typography>Don't have an account? Sign Up</Typography>
+                <Link href="/registration">
+                  <Typography>Dont have an account? Sign Up</Typography>
                 </Link>
             </CardContent>
           </Card>

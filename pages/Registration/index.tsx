@@ -312,7 +312,7 @@ export default function Registration() {
                 </Button>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Link href="/Auth">Already have an account? Login</Link>
+                <Link href="/auth">Already have an account? Login</Link>
               </Grid>
             </Grid>
           </Box>

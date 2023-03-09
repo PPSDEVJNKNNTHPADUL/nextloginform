@@ -1,18 +1,19 @@
 import { NextResponse } from "next/server";
 
 export default function Middleware(req: NextResponse) {
-  let verify = req.cookies.get("session");
+  let verify = req.cookies.get("isLogin");
+  let id = req.cookies.get("session");
   let url = req.url;
 
 
-  if (!verify && url.includes(`http://localhost:3000/profile/${verify}`)) {
-    return NextResponse.redirect("http://localhost:3000/Auth");
+  if (!verify && url.includes(`/profile/${id}`)) {
+    return NextResponse.rewrite(new URL('/auth', req.url))
   }
 
-  if (verify && url === "http://localhost:3000/Auth") {
-    return NextResponse.redirect(`http://localhost:3000/profile/${verify}`);
+  if (verify && url === "/auth") {
+    return NextResponse.rewrite(new URL(`/profile/${id}`, req.url))
   }
-  if (verify && url === "http://localhost:3000/Registration") {
-    return NextResponse.redirect(`http://localhost:3000/profile/${verify}`);
+  if (verify && url === "/registration") {
+    return NextResponse.rewrite(new URL(`/profile/${id}`, req.url))
   }
 }
