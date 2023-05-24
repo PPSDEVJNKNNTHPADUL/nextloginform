@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR from 'swr';
 
 async function fetcher(url: RequestInfo | URL) {
   const res = await fetch(url);
@@ -8,5 +8,5 @@ async function fetcher(url: RequestInfo | URL) {
 }
 
 export default function useMe() {
-  return useSWR("/api/me", fetcher);
+  return useSWR('/api/me', fetcher);
 }

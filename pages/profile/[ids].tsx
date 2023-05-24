@@ -1,13 +1,12 @@
+import React, { useEffect } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import axios from 'axios';
-import useMe from "../../hooks/use-me";
-import Router from "next/router";
-import { useEffect } from "react";
-import dynamic from "next/dynamic";
-import { Box, Button, Card, CardContent, Typography } from '@mui/material';
+import Router from 'next/router';
+import {
+  Button, Card, CardContent, Typography,
+} from '@mui/material';
 import { deleteCookie } from 'cookies-next';
-
-const DynamicHeader = dynamic(() => import("../../components/header"), {});
+import useMe from '../../hooks/use-me';
 
 interface User {
   id: number;
@@ -24,19 +23,17 @@ interface DetailsProps {
 }
 
 function logout() {
-  return fetch("/api/logout", { method: "POST" });
+  return fetch('/api/logout', { method: 'POST' });
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const res = await axios.get('https://63e1d7b34324b12d963f6754.mockapi.io/test/');
-  const data: User[] = res.data;
+  const { data } = res;
 
   // map data to an array of path objects with params (id)
-  const paths = data.map((user) => {
-    return {
-      params: { ids: user.id.toString() },
-    };
-  });
+  const paths = data.map((user: { id: { toString: () => any; }; }) => ({
+    params: { ids: user.id.toString() },
+  }));
 
   return {
     paths,
@@ -47,18 +44,18 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps<DetailsProps> = async (context) => {
   const id = context.params?.ids as string;
   const res = await axios.get(`https://63e1d7b34324b12d963f6754.mockapi.io/test/${id}`);
-  const data: User = res.data;
+  const { data } = res;
 
   return {
     props: { user: data }, revalidate: 10,
   };
 };
 
-const Details = ({ user }: DetailsProps) => {
+function Details({ user }: DetailsProps) {
   const { data: res, mutate } = useMe();
 
   useEffect(() => {
-    if (!res || res.error) Router.push("/auth");
+    if (!res || res.error) Router.push('/auth');
   }, [res]);
 
   if (!res || res.error) {
@@ -67,60 +64,79 @@ const Details = ({ user }: DetailsProps) => {
 
   function handleLogout() {
     logout().then(() => mutate());
-    deleteCookie('isLogin')
+    deleteCookie('isLogin');
   }
 
   return (
-    <>
-    <DynamicHeader/>
     <Card sx={{
-          minWidth: 275,
-          backgroundColor: '#f5f5f5',
-          boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.2)',
-          borderRadius: '10px',
-          margin: 'auto',
-          marginTop: '100px',
-          maxWidth: '500px'
-    }}>
+      minWidth: 275,
+      backgroundColor: '#f5f5f5',
+      boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.2)',
+      borderRadius: '10px',
+      margin: 'auto',
+      marginTop: '100px',
+      maxWidth: '500px',
+    }}
+    >
       <CardContent>
-        <Typography variant="h5" component="h2" sx={{
-              fontSize: 24,
-              fontWeight: 'bold',
-              marginBottom: '20px',
-        }}>
-          Username: {user.username}
+        <Typography
+          variant="h5"
+          component="h2"
+          sx={{
+            fontSize: 24,
+            fontWeight: 'bold',
+            marginBottom: '20px',
+          }}
+        >
+          Username:
+          {' '}
+          {user.username}
         </Typography>
-        <Typography color="text.secondary" sx={{
-              fontSize: 18,
-              marginBottom: '10px',
-        }}>
-          Fullname:{user.firstName} {user.middleName} {user.lastName}
+        <Typography
+          color="text.secondary"
+          sx={{
+            fontSize: 18,
+            marginBottom: '10px',
+          }}
+        >
+          Fullname:
+          {user.firstName}
+          {' '}
+          {user.middleName}
+          {' '}
+          {user.lastName}
         </Typography>
-        <Typography color="text.secondary" sx={{
-              fontSize: 18,
-              marginBottom: '10px',
-        }}>
-          Email:{user.emailAdd}
+        <Typography
+          color="text.secondary"
+          sx={{
+            fontSize: 18,
+            marginBottom: '10px',
+          }}
+        >
+          Email:
+          {user.emailAdd}
         </Typography>
-        <Typography color="text.secondary"sx={{
-              fontSize: 18,
-              marginBottom: '10px',
-        }}>
-          Contact:{user.contact}
+        <Typography
+          color="text.secondary"
+          sx={{
+            fontSize: 18,
+            marginBottom: '10px',
+          }}
+        >
+          Contact:
+          {user.contact}
         </Typography>
 
-      <Button
-        variant="contained"
-        sx={{marginTop: '2rem',}}
-        onClick={handleLogout}
-      >
-        Logout
-      </Button>
+        <Button
+          variant="contained"
+          sx={{ marginTop: '2rem' }}
+          onClick={handleLogout}
+        >
+          Logout
+        </Button>
       </CardContent>
     </Card>
-    </>
   );
-};
+}
 
 export default Details;
-

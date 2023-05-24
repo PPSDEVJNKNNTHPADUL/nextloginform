@@ -1,19 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-export default function Middleware(req: NextResponse) {
-  let verify = req.cookies.get("isLogin");
-  let id = req.cookies.get("session");
-  let url = req.url;
+export function middleware(req: NextRequest) {
+  const authCookie = req.cookies.get('KEYCLOAK_SESSION');
 
-
-  if (!verify && url.includes(`/profile/${id}`)) {
-    return NextResponse.rewrite(new URL('/auth', req.url))
-  }
-
-  if (verify && url === "/auth") {
-    return NextResponse.rewrite(new URL(`/profile/${id}`, req.url))
-  }
-  if (verify && url === "/registration") {
-    return NextResponse.rewrite(new URL(`/profile/${id}`, req.url))
+  if (authCookie && req.nextUrl.pathname.startsWith('/')) {
+    return NextResponse.rewrite(new URL('/profile', req.url))
   }
 }
